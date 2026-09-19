@@ -1,0 +1,370 @@
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Gemini API Key 怎么用？Gemini API 接口调用与 OpenAI 兼容接入教程</title>
+  <meta name="description" content="Gemini API Key 怎么配置？本文详细介绍 Gemini API 接口调用方法、Gemini API 国内接入、Gemini OpenAI 兼容接口、Python 与 JavaScript 示例、Gemini 模型选择、图片理解和常见报错处理。">
+  <meta name="keywords" content="Claude中转站,ClaGemini API Key,Gemini API接口,Gemini API调用,Gemini怎么调用,Gemini国内调用,Gemini API国内接入,Gemini OpenAI兼容,Gemini接口调用,Gemini模型,Gemini Flash,Gemini Pro,Gemini多模态,Gemini图片识别,Gemini API中转,Gemini中转站,Google Gemini API,大模型API中转站,AI API接口
+ude API,Claude调用,Claude API国内,Claude国内调用,Claude API中转,Anthropic API,Claude接口,Claude API Key,Claude代理,Claude中转API,Claude 3 API,Claude 3.5 API,Claude 4 API,大模型API中转站,AI API中转站,OpenAI兼容接口">
+  <meta name="author" content="作者名称">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://quanzil.com/articles/how-to-call-gpt-api-in-china.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ai api">
+  <meta property="og:title" content="Gemini API Key 怎么用？Gemini API 接口调用与 OpenAI 兼容接入教程">
+  <meta property="og:description" content="Gemini API Key 怎么配置？本文详细介绍 Gemini API 接口调用方法、Gemini API 国内接入、Gemini OpenAI 兼容接口、Python 与 JavaScript 示例、Gemini 模型选择、图片理解和常见报错处理。">
+  <meta property="og:url" content="https://quanzil.com/articles/how-to-call-gpt-api-in-china.html">
+  <meta property="og:image" content="https://quanzil.com/images/article-cover.jpg">
+  <meta property="og:locale" content="zh_CN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gemini API Key 怎么用？Gemini API 接口调用与 OpenAI 兼容接入教程">
+  <meta name="twitter:description" content="Gemini API Key 怎么配置？本文详细介绍 Gemini API 接口调用方法、Gemini API 国内接入、Gemini OpenAI 兼容接口、Python 与 JavaScript 示例、Gemini 模型选择、图片理解和常见报错处理。">
+  <meta name="twitter:image" content="https://quanzil.com/images/article-cover.jpg">
+
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --surface: #fff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --code-bg: #111827;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.8;
+    }
+    a { color: var(--accent); }
+    .site-header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.97);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    .header-inner, .page, .site-footer {
+      width: min(100% - 32px, 1100px);
+      margin: 0 auto;
+    }
+    .header-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, .2);
+    }
+    .brand-copy {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .brand {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .brand-tagline {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+      margin-right: 22px;
+    }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 11px;
+      border-radius: 7px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: color .2s ease, background .2s ease;
+    }
+    .nav-link:hover, .nav-link.active {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+    .page { padding: 56px 0 72px; }
+    .article {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: clamp(24px, 5vw, 64px);
+      box-shadow: 0 8px 30px rgba(15, 23, 42, .04);
+    }
+    .article-header { margin-bottom: 40px; }
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    h1 {
+      margin: 0 0 16px;
+      color: #111827;
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.25;
+      letter-spacing: -.02em;
+    }
+    .summary {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-target {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, .18);
+      transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+    .header-target:hover {
+      background: #1d4ed8;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(37, 99, 235, .25);
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .markdown-body { font-size: 17px; }
+    .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+      margin: 2em 0 .7em;
+      color: #111827;
+      line-height: 1.35;
+    }
+    .markdown-body h2 {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 28px;
+    }
+    .markdown-body h3 { font-size: 22px; }
+    .markdown-body p, .markdown-body ul, .markdown-body ol, .markdown-body blockquote { margin: 1em 0; }
+    .markdown-body img { max-width: 100%; height: auto; border-radius: 8px; }
+    .markdown-body blockquote {
+      margin-left: 0;
+      padding: 12px 18px;
+      border-left: 3px solid var(--accent);
+      background: var(--accent-light);
+      color: #374151;
+    }
+    .markdown-body code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #f3f4f6;
+      font-size: .9em;
+    }
+    .markdown-body pre {
+      overflow-x: auto;
+      padding: 18px;
+      border-radius: 8px;
+      background: var(--code-bg);
+      color: #e5e7eb;
+      line-height: 1.6;
+    }
+    .markdown-body pre code { padding: 0; background: transparent; color: inherit; }
+    .markdown-body table { display: block; overflow-x: auto; border-collapse: collapse; width: 100%; }
+    .markdown-body th, .markdown-body td { padding: 9px 12px; border: 1px solid var(--line); text-align: left; }
+    .markdown-body th { background: #f9fafb; }
+    .site-footer { padding: 24px 0 48px; color: var(--muted); font-size: 13px; text-align: center; }
+    @media (max-width: 640px) {
+      .header-inner { min-height: 56px; }
+      .brand-tagline, .main-nav { display: none; }
+      .page { padding: 24px 0 40px; }
+      .article { padding: 22px 18px; }
+      .markdown-body { font-size: 16px; }
+      .header-actions { gap: 10px; }
+      .header-target { padding: 8px 11px; font-size: 13px; }
+      .brand-mark { width: 31px; height: 31px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a id="site-brand" class="brand-wrap" href="https://quanzil.com/" aria-label="返回网站首页">
+        <span id="brand-mark" class="brand-mark">AI</span>
+        <span class="brand-copy">
+          <span id="brand-name" class="brand">API</span>
+          <span id="brand-tagline" class="brand-tagline">让技术更简单</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="主导航">
+        <a id="nav-home" class="nav-link active" href="https://quanzil.com/">首页</a>
+        <a id="nav-articles" class="nav-link" href="https://quanzil.com/pricing">模型价格</a>
+        <a id="nav-docs" class="nav-link" href="https://docs.quanzil.com/">API 文档</a>
+        <a id="nav-pricing" class="nav-link" href="https://quanzil.com/news/focus">文章资讯</a>
+      </nav>
+      <div class="header-actions">
+        <a id="header-target" class="header-target" href="https://quanzil.com/" target="_blank" rel="noopener noreferrer">进入 API 中转站 →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <article class="article" itemscope itemtype="https://schema.org/Article">
+      <header class="article-header">
+        <p class="eyebrow">原创文章</p>
+        <h1 id="article-title" itemprop="headline">Gemini API Key 怎么用？Gemini API 接口调用与 OpenAI 兼容接入教程</h1>
+        <p id="article-summary" class="summary" itemprop="description">Gemini API Key 怎么配置？本文详细介绍 Gemini API 接口调用方法、Gemini API 国内接入、Gemini OpenAI 兼容接口、Python 与 JavaScript 示例、Gemini 模型选择、图片理解和常见报错处理。</p>
+        <div class="meta">
+          <span>作者：<span id="article-author" itemprop="author">ai agent</span></span>
+          <span>发布时间：<time id="publish-date" itemprop="datePublished" datetime="2026-09-18">2026年09月18日</time></span>
+          <span>更新时间：<time id="update-date" itemprop="dateModified"></time></span>
+        </div>
+      </header>
+
+      <div id="markdown-content" class="markdown-body" itemprop="articleBody"></div>
+      <script type="application/json" id="article-markdown">
+"很多开发者搜索“**Gemini API Key 怎么用**”“**Gemini API 接口怎么调用**”“**Gemini 国内怎么接入**”，本质上都是想把 Gemini 接入到自己的程序中。\n\n例如：\n\n- 在网站中加入 AI 问答\n- 开发 Gemini 聊天机器人\n- 使用 Gemini 分析图片\n- 让 Gemini 总结长文本\n- 接入企业知识库\n- 使用 Gemini 编写和分析代码\n- 通过统一接口切换 GPT、Claude、Gemini 等模型\n\n先简单说明：\n\n- **Gemini API Key** 用于验证 API 请求身份\n- Gemini API 可以用于文本生成、对话、代码、图片理解和文档分析等任务\n- 如果直接调用原生接口，需要按照对应官方格式构造请求\n- 如果使用支持 OpenAI 兼容格式的 Gemini 中转 API，可以复用现有的 OpenAI SDK 和项目代码\n- 国内开发者在选择接入方式时，还需要考虑网络环境、模型支持、计费、限流和服务稳定性\n\n**国内推荐 API 中转站平台：**\n\n\u003e AI API 中转站平台地址：\u003chttps://quanzil.com\u003e\n\n\u003e AI API 中转站平台地址：\u003chttps://quanzil.net\u003e\n\n本文将介绍 Gemini API Key 的配置方法、Gemini API 接口调用流程，以及如何通过 OpenAI 兼容格式接入 Gemini。\n\n---\n\n## Gemini API Key 是什么\n\nGemini API Key 是调用 Gemini API 时使用的访问凭证。\n\n当你的程序向 Gemini API 发送请求时，平台需要通过 API Key 判断：\n\n- 当前请求来自哪个账户\n- 当前账户是否有调用权限\n- 请求是否使用了正确的模型\n- 当前账户是否有余额或配额\n- 请求是否超过频率限制\n\nAPI Key 本身不是模型名称，也不是 API 地址。\n\n一次完整的 API 调用通常需要三个核心信息：\n\n```text\nAPI Key + API 请求地址 + 模型名称\n```\n\n例如：\n\n```text\nAPI Key：YOUR_API_KEY\nBase URL：https://your-api-domain.com/v1\n模型名称：gemini-2.0-flash\n```\n\n具体的模型名称和接口地址，需要以你使用的平台实际支持情况为准。\n\n---\n\n## Gemini API 可以做什么\n\nGemini API 适用于多种 AI 应用场景。\n\n### 文本生成\n\n可以用于：\n\n- 文章写作\n- 营销文案\n- 产品介绍\n- 邮件生成\n- 标题生成\n- 内容改写\n- 语法纠错\n\n---\n\n### 多轮对话\n\n可以开发：\n\n- AI 助手\n- 智能客服\n- 在线问答\n- 企业内部助手\n- 教育辅导工具\n- 售前咨询机器人\n\n---\n\n### 代码处理\n\nGemini API 可以用于：\n\n- 生成代码\n- 解释代码\n- 修复错误\n- 编写测试\n- 代码重构\n- SQL 生成\n- 接口文档生成\n\n---\n\n### 文档和长文本分析\n\n常见用途包括：\n\n- 合同摘要\n- 报告总结\n- 会议纪要整理\n- 产品需求分析\n- PDF 内容提取\n- 文档问答\n- 多份资料对比\n\n---\n\n### 图片理解\n\n支持多模态能力的 Gemini 模型可以用于：\n\n- 图片问答\n- 截图分析\n- 商品图片识别\n- 表格截图理解\n- UI 页面分析\n- 图片文字提取\n- 图文内容总结\n\n是否支持图片输入，以及具体参数格式，要以接口文档为准。\n\n---\n\n## Gemini API 国内接入方式\n\n目前开发者常见的 Gemini 接入方式主要有两类。\n\n### 直接调用原生 Gemini API\n\n这种方式一般需要：\n\n- 使用官方 SDK 或接口格式\n- 配置 API Key\n- 按照原生请求结构发送参数\n- 自行处理访问、限流和错误\n- 根据官方返回结构解析结果\n\n这种方式适合熟悉 Gemini 原生接口、只使用 Gemini 模型，并且具备稳定访问环境的团队。\n\n---\n\n### 使用 Gemini API 中转站\n\n另一种方式是使用支持 Gemini 的 API 中转服务。\n\n常见特点包括：\n\n- 提供统一 API 地址\n- 支持 OpenAI 兼容格式\n- 可以使用统一的 Bearer Key\n- 方便切换多个模型\n- 减少不同 SDK 之间的适配工作\n- 便于在 GPT、Claude、Gemini 等模型之间进行测试\n\n如果你的项目已经基于 OpenAI API 开发，使用兼容接口通常会更容易迁移。\n\n---\n\n## Gemini API Key 应该放在哪里\n\nAPI Key 建议放在服务端环境变量中。\n\nLinux 或 macOS 环境可以这样设置：\n\n```bash\nexport GEMINI_API_KEY=\"YOUR_API_KEY\"\n```\n\nPython 中读取：\n\n```python\nimport os\n\napi_key = os.getenv(\"GEMINI_API_KEY\")\nprint(api_key)\n```\n\nNode.js 中读取：\n\n```javascript\nconst apiKey = process.env.GEMINI_API_KEY;\n```\n\n不建议采用以下方式：\n\n```javascript\nconst apiKey = \"YOUR_API_KEY\";\n```\n\n尤其不要把真实 API Key 直接写进：\n\n- 前端 JavaScript\n- Android APK\n- iOS 客户端\n- GitHub 仓库\n- 公共博客\n- 截图和教程\n- 浏览器可见的请求代码\n\n因为前端代码会暴露给用户，任何人都可能复制你的 Key 进行调用。\n\n---\n\n## Gemini API Key 请求头怎么写\n\n如果使用 OpenAI 兼容格式，通常使用以下请求头：\n\n```bash\nAuthorization: Bearer YOUR_API_KEY\n```\n\n完整示例：\n\n```bash\ncurl https://your-api-domain.com/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -d '{\n    \"model\": \"gemini-2.0-flash\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": \"请介绍 Gemini API。\"\n      }\n    ]\n  }'\n```\n\n不同平台的鉴权方式可能存在差异。\n\n有些原生 Gemini 接口可能使用其他参数方式，例如查询参数或特定请求头。因此，调用前一定要确认当前平台的接口文档。\n\n---\n\n## Gemini API 最小调用示例\n\n### cURL 调用示例\n\n下面是 OpenAI 兼容格式的 Gemini API 调用方式：\n\n```bash\ncurl https://your-api-domain.com/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -d '{\n    \"model\": \"gemini-2.0-flash\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": \"请用三句话介绍 Gemini API 的用途。\"\n      }\n    ],\n    \"temperature\": 0.7,\n    \"max_tokens\": 500\n  }'\n```\n\n请求中的几个字段分别表示：\n\n- `model`：要调用的模型\n- `messages`：对话消息\n- `temperature`：输出随机性\n- `max_tokens`：最大输出长度\n\n---\n\n### Python requests 示例\n\n```python\nimport os\nimport requests\n\nurl = \"https://your-api-domain.com/v1/chat/completions\"\napi_key = os.getenv(\"GEMINI_API_KEY\")\n\npayload = {\n    \"model\": \"gemini-2.0-flash\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"请解释 Gemini API 和普通网页聊天有什么区别。\"\n        }\n    ],\n    \"temperature\": 0.7,\n    \"max_tokens\": 500\n}\n\nheaders = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": f\"Bearer {api_key}\"\n}\n\nresponse = requests.post(\n    url,\n    headers=headers,\n    json=payload,\n    timeout=60\n)\n\nprint(response.status_code)\nprint(response.json())\n```\n\n建议在正式项目中增加异常处理：\n\n```python\nimport os\nimport requests\n\nurl = \"https://your-api-domain.com/v1/chat/completions\"\napi_key = os.getenv(\"GEMINI_API_KEY\")\n\npayload = {\n    \"model\": \"gemini-2.0-flash\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"请总结 Gemini API 的主要特点。\"\n        }\n    ],\n    \"max_tokens\": 500\n}\n\nheaders = {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": f\"Bearer {api_key}\"\n}\n\ntry:\n    response = requests.post(\n        url,\n        headers=headers,\n        json=payload,\n        timeout=60\n    )\n\n    response.raise_for_status()\n    data = response.json()\n\n    print(data)\n\nexcept requests.exceptions.Timeout:\n    print(\"请求超时，请稍后重试\")\n\nexcept requests.exceptions.HTTPError as error:\n    print(\"HTTP 请求失败：\", error)\n\nexcept requests.exceptions.RequestException as error:\n    print(\"请求异常：\", error)\n```\n\n---\n\n## 使用 OpenAI SDK 调用 Gemini\n\n如果 Gemini API 中转站支持 OpenAI 兼容格式，可以直接使用 OpenAI SDK。\n\n安装依赖：\n\n```bash\npip install openai\n```\n\n调用代码：\n\n```python\nimport os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"GEMINI_API_KEY\"),\n    base_url=\"https://your-api-domain.com/v1\"\n)\n\nresponse = client.chat.completions.create(\n    model=\"gemini-2.0-flash\",\n    messages=[\n        {\n            \"role\": \"system\",\n            \"content\": \"你是一名专业的技术顾问。\"\n        },\n        {\n            \"role\": \"user\",\n            \"content\": \"请说明 Gemini API 适合哪些业务场景。\"\n        }\n    ],\n    temperature=0.7,\n    max_tokens=600\n)\n\nprint(response.choices[0].message.content)\n```\n\n如果你原来调用的是 GPT，很多情况下只需要调整：\n\n```python\nclient = OpenAI(\n    api_key=\"YOUR_API_KEY\",\n    base_url=\"https://your-api-domain.com/v1\"\n)\n```\n\n以及：\n\n```python\nmodel=\"gemini-2.0-flash\"\n```\n\n这样可以减少项目重构成本。\n\n---\n\n## Gemini API 流式输出怎么调用\n\n如果你的应用是聊天机器人，通常希望模型逐字返回内容，而不是等待完整结果生成后一次性显示。\n\n如果平台支持流式调用，可以使用：\n\n```python\nimport os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"GEMINI_API_KEY\"),\n    base_url=\"https://your-api-domain.com/v1\"\n)\n\nstream = client.chat.completions.create(\n    model=\"gemini-2.0-flash\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": \"请介绍如何设计一个 Gemini API 应用。\"\n        }\n    ],\n    stream=True\n)\n\nfor chunk in stream:\n    content = chunk.choices[0].delta.content\n\n    if content:\n        print(content, end=\"\", flush=True)\n```\n\n流式输出适合：\n\n- AI 聊天页面\n- 在线写作工具\n- 实时客服\n- 代码生成界面\n- 长回答场景\n\n使用流式接口时，要注意处理：\n\n- 连接中断\n- 空数据块\n- 客户端取消请求\n- 前端拼接内容\n- 请求超时\n- 最终响应状态\n\n---\n\n## Gemini API 如何传递系统提示词\n\n系统提示词可以用于设置模型角色、回答风格和输出规则。\n\n示例：\n\n```python\nmessages = [\n    {\n        \"role\": \"system\",\n        \"content\": \"你是一名专业的中文技术编辑，回答要准确、简洁、结构清晰。\"\n    },\n    {\n        \"role\": \"user\",\n        \"content\": \"请解释什么是 Gemini API。\"\n    }\n]\n```\n\n常见的系统提示词要求包括：\n\n- 使用中文回答\n- 只输出 JSON\n- 不要编造不存在的信息\n- 回答控制在指定字数内\n- 扮演客服、程序员或产品经理\n- 使用 Markdown 格式\n- 给出分步骤解决方案\n\n系统提示词不是越长越好。\n\n建议只保留真正影响模型行为的规则，避免增加无关内容和调用成本。\n\n---\n\n## Gemini API 如何返回 JSON\n\n如果你需要将模型结果交给程序继续处理，可以要求返回 JSON。\n\n提示词示例：\n\n```text\n请分析下面的商品描述，并只返回合法 JSON。\n\n返回字段：\nname：商品名称\ncategory：商品分类\nsummary：商品摘要\nkeywords：关键词数组\n\n不要输出 Markdown，不要添加额外解释。\n```\n\nPython 示例：\n\n```python\nimport json\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=\"YOUR_API_KEY\",\n    base_url=\"https://your-api-domain.com/v1\"\n)\n\nresponse = client.chat.completions.create(\n    model=\"gemini-2.0-flash\",\n    messages=[\n        {\n            \"role\": \"system\",\n            \"content\": \"你只返回合法 JSON，不要输出其他内容。\"\n        },\n        {\n            \"role\": \"user\",\n            \"content\": \"请提取这段文本中的标题、分类和关键词。\"\n        }\n    ]\n)\n\ncontent = response.choices[0].message.content\n\ntry:\n    data = json.loads(content)\n    print(data)\nexcept json.JSONDecodeError:\n    print(\"模型返回的内容不是合法 JSON：\")\n    print(content)\n```\n\n正式项目中仍然建议做 JSON 校验，因为模型可能偶尔添加解释文字或 Markdown 代码块。\n\n---\n\n## Gemini API 图片理解怎么调用\n\n如果你要让 Gemini 分析图片，需要确认当前模型和平台是否支持多模态输入。\n\n常见应用包括：\n\n- 分析网页截图\n- 识别商品图片\n- 读取表格截图\n- 解释流程图\n- 分析 UI 设计\n- 提取图片中的文字\n- 判断图片内容\n\n不同 API 平台对图片输入的格式可能不同，常见方式包括：\n\n- 图片 URL\n- Base64\n- 多模态 `content` 数组\n- 单独的图片字段\n\nOpenAI 兼容格式示例可能类似：\n\n```python\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=\"YOUR_API_KEY\",\n    base_url=\"https://your-api-domain.com/v1\"\n)\n\nresponse = client.chat.completions.create(\n    model=\"gemini-2.0-flash\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"text\",\n                    \"text\": \"请描述这张图片中的主要内容。\"\n                },\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://example.com/image.jpg\"\n                    }\n                }\n            ]\n        }\n    ]\n)\n\nprint(response.choices[0].message.content)\n```\n\n注意：不同中转平台对多模态参数的支持可能不同，实际使用前需要查看平台文档。\n\n---\n\n## Gemini 模型怎么选择\n\n### Gemini Flash 类模型\n\n适合：\n\n- 普通聊天\n- 简单问答\n- 内容改写\n- 文本摘要\n- 分类任务\n- 高并发客服\n- 成本敏感型场景\n- 基础图片理解\n\n如果你刚开始开发 Gemini 应用，可以先使用 Flash 类模型测试。\n\n---\n\n### Gemini Pro 类模型\n\n适合：\n\n- 复杂分析\n- 高质量内容生成\n- 代码开发\n- 长文档理解\n- 企业知识库问答\n- 多步骤任务\n- 对回答质量要求较高的业务\n\nPro 类模型的成本和响应速度可能与轻量模型不同，建议根据实际任务测试。\n\n---\n\n### Gemini 多模态模型\n\n如果项目需要处理图片、视频、表格或文档，需要选择支持对应输入类型的模型。\n\n使用前要确认：\n\n- 是否支持图片输入\n- 是否支持文件输入\n- 支持哪些图片格式\n- 单个文件大小限制\n- 是否支持视频或 PDF\n- 多模态输入如何计费\n\n---\n\n## Gemini API 成本怎么控制\n\n### 不要发送过长的历史消息\n\n多轮对话如果持续发送完整历史记录，输入 token 会不断增加。\n\n可以采用以下方式：\n\n- 只保留最近几轮对话\n- 定期将历史内容压缩成摘要\n- 删除无关消息\n- 对长文档使用检索\n- 只发送当前问题相关内容\n\n---\n\n### 限制输出长度\n\n可以通过参数限制输出：\n\n```json\n{\n  \"max_tokens\": 500\n}\n```\n\n同时在提示词中说明：\n\n```text\n请在 300 字以内完成回答。\n```\n\n---\n\n### 按任务选择模型\n\n建议使用模型分层策略：\n\n- 简单任务使用 Flash\n- 复杂任务使用 Pro\n- 图片和文档任务选择多模态模型\n- 高价值业务使用更高能力模型\n- 批量任务优先使用轻量模型\n\n---\n\n### 对重复请求进行缓存\n\n对于相同或相似的问题，可以加入缓存机制。\n\n适合缓存的内容包括：\n\n- FAQ\n- 产品介绍\n- 固定术语解释\n- 常见客服问题\n- 标准化摘要\n- 重复的分类任务\n\n缓存不仅可以降低成本，也能提高响应速度。\n\n---\n\n## Gemini API 常见报错\n\n### 401 错误\n\n`401 Unauthorized` 一般表示 API Key 或鉴权信息不正确。\n\n检查：\n\n```bash\nAuthorization: Bearer YOUR_API_KEY\n```\n\n同时确认：\n\n- API Key 没有多余空格\n- Key 没有失效\n- 请求头名称正确\n- Base URL 配置正确\n- 当前接口使用的是正确的 Key\n\n---\n\n### 403 错误\n\n`403 Forbidden` 通常表示没有权限。\n\n可能原因：\n\n- 账户没有对应模型权限\n- 当前 Key 权限不足\n- 账户状态异常\n- 平台限制了当前请求\n- 调用了不支持的接口\n\n建议检查账户权限、模型列表和平台说明。\n\n---\n\n### 404 错误\n\n`404 Not Found` 通常表示地址或路径错误。\n\n常见问题：\n\n- Base URL 写错\n- 缺少 `/v1`\n- endpoint 路径错误\n- 把完整请求地址重复拼接\n- 当前平台不支持该调用格式\n\n常见 OpenAI 兼容路径：\n\n```text\nhttps://your-api-domain.com/v1/chat/completions\n```\n\n---\n\n### 429 错误\n\n`429 Too Many Requests` 通常表示频率过高或余额、配额不足。\n\n处理建议：\n\n- 降低请求频率\n- 限制并发数量\n- 增加指数退避重试\n- 设置请求队列\n- 检查账户余额\n- 切换轻量模型\n- 对相同请求进行缓存\n\n---\n\n### 500、502、503、504 错误\n\n这些错误通常与服务端、上游接口或网络超时有关。\n\n建议：\n\n- 设置合理的超时时间\n- 对临时错误进行重试\n- 记录错误日志\n- 减少单次请求长度\n- 降低并发\n- 准备备用模型或降级方案\n\n不要对所有错误无限重试，否则可能导致请求堆积或重复计费。\n\n---\n\n## Gemini API 中转站怎么选\n\n选择 Gemini API 中转站时，可以重点关注以下方面。\n\n### 是否支持 OpenAI 兼容格式\n\n如果支持 OpenAI 兼容接口，你可以更方便地复用现有 SDK 和代码。\n\n---\n\n### 是否支持常用 Gemini 模型\n\n查看平台是否提供你需要的模型，例如：\n\n- Flash 类模型\n- Pro 类模型\n- 多模态模型\n- 长上下文模型\n\n模型名称以平台实际列表为准。\n\n---\n\n### 是否有详细的开发文档\n\n至少应该能够查到：\n\n- Base URL\n- API Key 配置方式\n- 请求示例\n- 模型列表\n- 参数说明\n- 错误代码\n- 流式调用方式\n- 多模态调用方式\n\n---\n\n### 是否支持调用记录和余额管理\n\n开发过程中建议关注：\n\n- 请求次数\n- Token 消耗\n- 调用模型\n- 响应耗时\n- 错误比例\n- 账户余额\n\n这些数据可以帮助你控制成本和定位问题。\n\n---\n\n## Gemini API 和其他大模型如何切换\n\n如果项目使用 OpenAI 兼容格式，可以将模型调用封装成一个函数。\n\n```python\nfrom openai import OpenAI\n\ndef call_model(\n    api_key,\n    base_url,\n    model,\n    prompt\n):\n    client = OpenAI(\n        api_key=api_key,\n        base_url=base_url\n    )\n\n    response = client.chat.completions.create(\n        model=model,\n        messages=[\n            {\n                \"role\": \"user\",\n                \"content\": prompt\n            }\n        ],\n        max_tokens=800\n    )\n\n    return response.choices[0].message.content\n```\n\n调用 Gemini：\n\n```python\nresult = call_model(\n    api_key=\"YOUR_API_KEY\",\n    base_url=\"https://your-api-domain.com/v1\",\n    model=\"gemini-2.0-flash\",\n    prompt=\"请介绍 Gemini API。\"\n)\n\nprint(result)\n```\n\n切换到其他模型时，只需要改变：\n\n```python\nmodel=\"another-model\"\n```\n\n这样可以降低业务代码对单个模型的依赖。\n\n---\n\n## 常见问题\n\n### Gemini API Key 怎么配置？\n\n建议将 API Key 设置为环境变量：\n\n```bash\nexport GEMINI_API_KEY=\"YOUR_API_KEY\"\n```\n\n然后在程序中读取：\n\n```python\nimport os\n\napi_key = os.getenv(\"GEMINI_API_KEY\")\n```\n\n不要直接将真实 Key 写入前端或公开代码仓库。\n\n---\n\n### Gemini API 可以使用 OpenAI SDK 吗？\n\n如果使用的中转站支持 OpenAI 兼容格式，一般可以通过配置 `base_url` 的方式使用 OpenAI SDK。\n\n但具体支持哪些参数，需要查看平台文档。\n\n---\n\n### Gemini API 国内调用需要注意什么？\n\n主要需要关注：\n\n- 网络访问稳定性\n- API Key 安全\n- 模型是否可用\n- 接口地址是否正确\n- 请求频率限制\n- 账户余额和配额\n- 多模态参数是否支持\n\n如果希望简化接入，可以选择提供 Gemini 模型调用能力的 API 中转站。\n\n---\n\n### Gemini Flash 和 Pro 哪个更好？\n\n没有绝对答案。\n\n- Flash 更适合速度快、成本低和高并发场景\n- Pro 更适合复杂任务、高质量生成和深度分析\n\n建议使用真实业务数据进行测试，再决定默认模型。\n\n---\n\n### Gemini API 可以做图片识别吗？\n\n支持多模态能力的 Gemini 模型可以处理图片理解任务。\n\n但需要确认：\n\n- 当前模型是否支持图片输入\n- 平台是否支持图片 URL 或 Base64\n- 请求格式是否符合平台要求\n- 图片大小和格式是否有限制\n\n---\n\n### Gemini API 能不能做企业知识库？\n\n可以。\n\n常见方案是：\n\n1. 用户提出问题\n2. 检索知识库\n3. 获取相关文档片段\n4. 将文档片段放进提示词\n5. 调用 Gemini API\n6. 返回回答和参考依据\n\n对于大规模知识库，建议使用 RAG，而不是把全部文档直接发送给模型。\n\n---\n\n## 总结\n\n**Gemini API Key 怎么用？Gemini API 接口怎么调用？**\n\n基本流程可以概括为：\n\n1. 准备 Gemini API Key\n2. 配置正确的 Base URL\n3. 选择可用的 Gemini 模型\n4. 按接口格式发送请求\n5. 解析返回内容\n6. 增加超时、重试和日志\n7. 根据业务控制模型和成本\n\n如果你只是测试 Gemini，可以先使用 cURL 或 Python 发起一个最小请求。\n\n如果你的项目已经使用 OpenAI SDK，或者后续还需要接入 GPT、Claude、DeepSeek 等模型，可以优先选择支持 OpenAI 兼容格式的 Gemini API 中转站。"
+      </script>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div>© <span id="current-year"></span>  保留所有权利</div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script>
+
+    const articleConfig = {
+  "title": "Gemini API Key 怎么用？Gemini API 接口调用与 OpenAI 兼容接入教程",
+  "summary": "Gemini API Key 怎么配置？本文详细介绍 Gemini API 接口调用方法、Gemini API 国内接入、Gemini OpenAI 兼容接口、Python 与 JavaScript 示例、Gemini 模型选择、图片理解和常见报错处理。",
+  "author": "ai agent",
+  "published": "2026-09-18 00:00:00",
+  "canonical": "https://quanzil.com/articles/how-to-call-gpt-api-in-china.html",
+  "targetUrl": "https://quanzil.com/",
+  "targetLabel": "进入 API 中转站 →",
+  "siteName": "API ",
+  "siteTagline": "让技术更简单",
+  "brandMark": "AI",
+  "homeUrl": "https://quanzil.com/",
+  "articlesUrl": "https://quanzil.com/pricing",
+  "docsUrl": "https://docs.quanzil.com/",
+  "pricingUrl": "https://quanzil.com/news/focus"
+};
+
+    const formatDate = value => new Intl.DateTimeFormat('zh-CN', {
+      year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date(value));
+
+    document.title = `${articleConfig.title}｜网站名称`;
+    document.getElementById('site-brand').href = articleConfig.homeUrl;
+    document.getElementById('brand-name').textContent = articleConfig.siteName;
+    document.getElementById('brand-tagline').textContent = articleConfig.siteTagline;
+    document.getElementById('brand-mark').textContent = articleConfig.brandMark;
+    document.getElementById('nav-home').href = articleConfig.homeUrl;
+    document.getElementById('nav-articles').href = articleConfig.articlesUrl;
+    document.getElementById('nav-docs').href = articleConfig.docsUrl;
+    document.getElementById('nav-pricing').href = articleConfig.pricingUrl;
+    document.getElementById('article-title').textContent = articleConfig.title;
+    document.getElementById('article-summary').textContent = articleConfig.summary;
+    document.getElementById('article-author').textContent = articleConfig.author;
+    const headerTarget = document.getElementById('header-target');
+    headerTarget.href = articleConfig.targetUrl;
+    headerTarget.textContent = articleConfig.targetLabel;
+    document.getElementById('publish-date').textContent = formatDate(articleConfig.published);
+    document.getElementById('publish-date').dateTime = articleConfig.published;
+
+    const updated = new Date();
+    const updateDate = updated.toISOString().slice(0, 10);
+    document.getElementById('update-date').textContent = formatDate(updateDate);
+    document.getElementById('update-date').dateTime = updateDate;
+    document.getElementById('current-year').textContent = updated.getFullYear();
+
+    const markdownSource = document.getElementById('article-markdown');
+    const markdown = markdownSource.type === 'application/json'
+      ? JSON.parse(markdownSource.textContent)
+      : markdownSource.textContent.trim().replaceAll('<\\/script>', '<' + '/script>');
+    const markdownContent = document.getElementById('markdown-content');
+    if (typeof marked !== 'undefined' && typeof DOMPurify !== 'undefined') {
+      const rendered = marked.parse(markdown, { gfm: true, breaks: false });
+      markdownContent.innerHTML = DOMPurify.sanitize(rendered);
+    } else {
+
+      markdownContent.textContent = markdown;
+      markdownContent.style.whiteSpace = 'pre-wrap';
+      markdownContent.style.overflowWrap = 'anywhere';
+    }
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: articleConfig.title,
+      description: articleConfig.summary,
+      author: { '@type': 'Person', name: articleConfig.author },
+      datePublished: articleConfig.published,
+      dateModified: updateDate,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': articleConfig.canonical }
+    };
+    const schemaScript = document.createElement('script');
+    schemaScript.type = 'application/ld+json';
+    schemaScript.textContent = JSON.stringify(schema);
+    document.head.appendChild(schemaScript);
+  </script>
+</body>
+</html>
